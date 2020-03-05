@@ -6,7 +6,10 @@ Level::Level(sf::RenderWindow* hwnd, Input* in)
 	input = in;
 
 	// initialise game objects
-
+	ball1 = Ball(sf::Vector2f(100.f, 100.f), sf::Vector2f(100.f, 0.f));
+	ball1.setWindow(hwnd);
+	ball2 = Ball(sf::Vector2f(600.f, 100.f), sf::Vector2f(-100.f, 0.f));
+	ball2.setWindow(hwnd);
 }
 
 Level::~Level()
@@ -23,6 +26,14 @@ void Level::handleInput(float dt)
 // Update game objects
 void Level::update(float dt)
 {
+	ball1.update(dt);
+	ball2.update(dt);
+	
+	if (Collision::checkBoundingCircle(&ball1, &ball2))
+	{
+		ball1.collisionResponse();
+		ball2.collisionResponse();
+	}
 	
 }
 
@@ -30,7 +41,8 @@ void Level::update(float dt)
 void Level::render()
 {
 	beginDraw();
-
+	window->draw(ball1);
+	window->draw(ball2);
 	endDraw();
 }
 
